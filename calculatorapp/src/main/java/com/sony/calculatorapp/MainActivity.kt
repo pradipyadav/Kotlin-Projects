@@ -3,6 +3,7 @@ package com.sony.calculatorapp
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.view.WindowManager
 import android.widget.Button
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -11,9 +12,14 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN)
     }
 
     fun buNumberEvent(view: View) {
+        if (isNewOp){
+            editShowNumber.setText("")
+        }
+        isNewOp=false
         val buSelect=view as Button
         var buClickValue:String=editShowNumber.text.toString()
         when(buSelect.id){
@@ -46,4 +52,55 @@ class MainActivity : AppCompatActivity() {
 
         editShowNumber.setText(buClickValue)
     }
+
+    var op="*"
+    var oldNumber=""
+    var isNewOp=true
+    fun buOpEvent(view: View) {
+        val buSelect =view as Button
+
+        when(buSelect.id){
+            buMul.id->{
+                op="*"
+            }buDiv.id->{
+                op="/"
+            }buSub.id->{
+                op="-"
+            }buSum.id->{
+                op="+"
+            }
+        }
+        oldNumber=editShowNumber.text.toString()
+        isNewOp=true
+    }
+
+    fun buEqualEvent(view: View) {
+        val newNumber=editShowNumber.text.toString()
+        var finalNumber:Double?=null
+        when(op){
+            "*"->{
+                finalNumber=oldNumber.toDouble()*newNumber.toDouble()
+            }"/"->{
+                finalNumber=oldNumber.toDouble()/newNumber.toDouble()
+            }"+"->{
+                finalNumber=oldNumber.toDouble()+newNumber.toDouble()
+            }"-"->{
+                finalNumber=oldNumber.toDouble()-newNumber.toDouble()
+            }
+        }
+        editShowNumber.setText(finalNumber.toString())
+        isNewOp=true
+    }
+
+    fun buPercent(view: View) {
+        var number:Double=editShowNumber.text.toString().toDouble()/100
+        editShowNumber.setText(number.toString())
+        isNewOp=true
+
+    }
+    fun buClean(view: View) {
+        editShowNumber.setText("0")
+        isNewOp=true
+    }
+
 }
