@@ -1,4 +1,4 @@
 rootProject.name='FindMyAge'
-include ':app'
+include ':FindAge'
 include ':tictactoygame'
 include ':calculatorapp'
