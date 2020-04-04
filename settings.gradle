@@ -1,0 +1,4 @@
+rootProject.name='FindMyAge'
+include ':app'
+include ':tictactoygame'
+include ':calculatorapp'
