@@ -11,11 +11,12 @@ import com.sony.mynotes.R
 import com.sony.mynotes.db.Note
 import com.sony.mynotes.db.NoteDatabase
 import kotlinx.android.synthetic.main.fragment_add_note.*
+import kotlinx.coroutines.launch
 
 /**
  * A simple [Fragment] subclass.
  */
-class AddNoteFragment : Fragment() {
+class AddNoteFragment : BaseFragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,11 +42,25 @@ class AddNoteFragment : Fragment() {
                 edit_text_note.requestFocus()
                 return@setOnClickListener
             }
-            val note = Note(noteTitle, noteBody)
-            saveNote(note)
+
+          launch {
+              val note = Note(noteTitle, noteBody)
+
+              context?.let {
+                  NoteDatabase(it).getNoteDao().addNote(note)
+
+                  it.toast("Note Saved!!")
+
+              }
+
+          }
+
 
         }
     }
+
+
+/*
 
     private fun saveNote(note: Note) {
         class SaveNotes : AsyncTask<Void, Void, Void>() {
@@ -70,4 +85,7 @@ class AddNoteFragment : Fragment() {
         SaveNotes().execute()
     }
 
+*/
+
 }
+
