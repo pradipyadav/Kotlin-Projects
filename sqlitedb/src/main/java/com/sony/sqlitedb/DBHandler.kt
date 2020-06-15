@@ -4,6 +4,7 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import android.util.Log
 import android.widget.Toast
 
 class DBHandler(
@@ -23,6 +24,7 @@ class DBHandler(
         val COLUMN_CUSTOMER_ID = "customerid"
         val COLUMN_CUSTOMER_NAME = "customername"
         val COLUMN_MAXCREDIT = "maxcredit"
+        val COLUMN_PHONE_NO = "phoneNo"
     }
 
 
@@ -35,7 +37,10 @@ class DBHandler(
     }
 
     override fun onUpgrade(p0: SQLiteDatabase?, p1: Int, p2: Int) {
-        TODO("Not yet implemented")
+
+//        if (p1 < 1) {
+//            p0?.execSQL("Alter Table $CUSTOMERS_TABLE_NAME" + "Add $COLUMN_PHONE_NO TEXT NULL")
+//        }
     }
 
     fun getCustomers(mCtx: Context): ArrayList<Customer> {
@@ -48,7 +53,8 @@ class DBHandler(
         if (cursor.count == 0)
             Toast.makeText(mCtx, "Records Not Found", Toast.LENGTH_LONG).show()
         else {
-            while (cursor.moveToNext()) {
+            cursor.moveToFirst()
+            while (!cursor.isAfterLast()) {
                 val customer = Customer()
 
                 customer.customerId = cursor.getInt(cursor.getColumnIndex(COLUMN_CUSTOMER_ID))
@@ -57,6 +63,8 @@ class DBHandler(
                 customer.maxCredit = cursor.getDouble(cursor.getColumnIndex(COLUMN_MAXCREDIT))
 
                 customers.add(customer)
+
+                cursor.moveToNext()
             }
 
             Toast.makeText(mCtx, "${cursor.count.toString()} Records Found", Toast.LENGTH_LONG)
@@ -82,6 +90,45 @@ class DBHandler(
             Toast.makeText(mCtx, e.message, Toast.LENGTH_LONG).show()
         }
         db.close()
+    }
+
+    fun deleteCustomer(customerID: Int): Boolean {
+
+        val qry = "Delete from $CUSTOMERS_TABLE_NAME where $COLUMN_CUSTOMER_ID=$customerID"
+        val db = this.writableDatabase
+        var result: Boolean = false
+
+        try {
+            /*var cursor = db.delete(
+                CUSTOMERS_TABLE_NAME,
+                "$COLUMN_CUSTOMER_ID=?",
+                arrayOf(customerID.toString())
+            )*/
+
+            val cursor = db.execSQL(qry)
+            result = true
+
+        } catch (e: Exception) {
+            Log.e(ContentValues.TAG, "Error Deleting")
+        }
+        db.close()
+        return result
+    }
+
+    fun updateCustomer(id: String, customerName: String, maxCredit: String): Boolean {
+        val db = writableDatabase
+        val contentValues = ContentValues()
+        var result: Boolean = false
+        contentValues.put(COLUMN_CUSTOMER_NAME, customerName)
+        contentValues.put(COLUMN_MAXCREDIT, maxCredit.toDouble())
+        try {
+            db.update(CUSTOMERS_TABLE_NAME, contentValues, "$COLUMN_CUSTOMER_ID=?", arrayOf(id))
+            result = true
+        } catch (e: Exception) {
+            Log.e(ContentValues.TAG, "Error Updating")
+            result = false
+        }
+        return result
     }
 
 }
