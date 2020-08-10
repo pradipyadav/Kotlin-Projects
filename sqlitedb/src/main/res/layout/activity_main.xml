@@ -8,10 +8,10 @@
 
 
     <androidx.recyclerview.widget.RecyclerView
-android:layout_marginTop="44dp"
         android:id="@+id/rv"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="44dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/coordinatorLayout" />
@@ -35,9 +35,9 @@ android:layout_marginTop="44dp"
             app:fabSize="auto"></com.google.android.material.floatingactionbutton.FloatingActionButton>
 
         <EditText
-            android:hint="Search here..."
             android:id="@+id/editSearch"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:hint="Search here..." />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

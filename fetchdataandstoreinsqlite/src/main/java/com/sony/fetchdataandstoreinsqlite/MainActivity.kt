@@ -50,7 +50,7 @@ class MainActivity : AppCompatActivity() {
                 call: Call<List<InfoData>>,
                 response: Response<List<InfoData>>
             ) {
-                infoList.clear()
+//                infoList.clear()
                 refreshLayout.isRefreshing = false
 
                 val info = response.body()
@@ -69,7 +69,7 @@ class MainActivity : AppCompatActivity() {
                         Log.e("email", infos.email)
 
                          dbHandler.addInfos(applicationContext, infos)
-
+                        getInfo()
                     }
 
                 }
@@ -80,7 +80,7 @@ class MainActivity : AppCompatActivity() {
 
 
         })
-        getInfo()
+
     }
 
     fun getInfo() {

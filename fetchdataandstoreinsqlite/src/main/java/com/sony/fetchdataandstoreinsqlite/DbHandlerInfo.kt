@@ -96,6 +96,44 @@ class DbHandlerInfo(
         }
         db.close()
     }
+    fun deleteCustomer(customerID: Int): Boolean {
 
+        val qry = "Delete from $CUSTOMERS_TABLE_NAME where $COLUMN_CUSTOMER_ID=$customerID"
+        val db = this.writableDatabase
+        var result: Boolean = false
+
+        try {
+            /*var cursor = db.delete(
+                CUSTOMERS_TABLE_NAME,
+                "$COLUMN_CUSTOMER_ID=?",
+                arrayOf(customerID.toString())
+            )*/
+
+            val cursor = db.execSQL(qry)
+            result = true
+
+        } catch (e: Exception) {
+            Log.e(ContentValues.TAG, "Error Deleting")
+        }
+        db.close()
+        return result
+    }
+
+    fun updateCustomer(id: String, customerName: String, customerUN: String, customerEmailID: String): Boolean {
+        val db = writableDatabase
+        val contentValues = ContentValues()
+        var result: Boolean = false
+        contentValues.put(COLUMN_CUSTOMER_NAME, customerName)
+        contentValues.put(COLUMN_CUSTOMER_USERNAME, customerUN)
+        contentValues.put(COLUMN_CUSTOMER_USERNAME, customerEmailID)
+        try {
+            db.update(CUSTOMERS_TABLE_NAME, contentValues, "$COLUMN_CUSTOMER_ID=?", arrayOf(id))
+            result = true
+        } catch (e: Exception) {
+            Log.e(ContentValues.TAG, "Error Updating")
+            result = false
+        }
+        return result
+    }
 
 }

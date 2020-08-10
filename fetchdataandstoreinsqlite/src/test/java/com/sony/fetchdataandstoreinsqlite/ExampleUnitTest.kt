@@ -1,4 +1,4 @@
-package com.sony.sqlitedbexample
+package com.sony.fetchdataandstoreinsqlite
 
 import org.junit.Test
 
